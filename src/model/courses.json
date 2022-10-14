@@ -1,0 +1,22 @@
+[
+    {
+        "id": 1,
+        "name": "Web dasturlash 💻",
+        "describtion": "Yaxshi kurs bizningcha"
+    },
+    {
+        "id": 2,
+        "name": "grafik dizayn 🏬",
+        "describtion": "Yaxshi kurs sizningcha "
+    },
+    {
+        "id": 3,
+        "name": "SMM 📑",
+        "describtion": "Yaxshi kurs ularning fikricha"
+    },
+    {
+        "id": 4,
+        "name": "Rus tili",
+        "describtion": "Yaxshi kurs ularning fikricha"
+    }
+]

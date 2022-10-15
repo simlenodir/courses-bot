@@ -81,31 +81,34 @@ bot.on('callback_query', msg => {
 bot.on('location', async msg => {
     const { latitude, longitude } = msg.location
     const userLocation = await geo(latitude, longitude)
+    
+    if(userLocation) {
+        console.log(typeof userLocation)
+        bot.sendMessage(msg.chat.id, `${userLocation} - shu manzilni tasdiqlaysizmi`, {
+            reply_markup: {
+                inline_keyboard: [
+                    [
+                        {
+                            text: "Ha",
+                            callback_data: "yes"
+                        },
+                        {
+                            text: "Yo'q",
+                            callback_data: "no"
+                        }
+                    ],
+                ]
+            }
+        })
+    }
 
-    console.log(userLocation);
-    bot.sendMessage(msg.chat.id, `manzilingiz ${userLocation} ekanini tasdiqlaysizmi?`, {
-        reply_markup: {
-            inline_keyboard: [
-                [
-                    {
-                        text: "Ha",
-                        callback_data: `${userLocation}::yes`
-                    },
-                    {
-                        text: "Yo'q",
-                        callback_data: "no"
-                    }
-                ],
-            ],
-            one_time_keyboard: true
-        }
-    })
     // console.log(msg);
 })
 
 bot.on('callback_query', async location => {
-    const userLocation = location?.data.split('::')[0]
-    const userStatus = location?.data.split('::')[1]
+    console.log(location);
+    const userLocation = location?.data.split('-')[1]
+    const userStatus = location?.data.split('-')[0]
 
     if (userStatus == 'yes') {
         const userContact = await contactHandlers(bot, location,)
@@ -123,7 +126,7 @@ bot.on('callback_query', async location => {
                 allUsers.push({
                     phone: msg.contact.phone_number,
                     name: name.text,
-                    location: userLocation
+                    location: location.message.text.split('-')
                 })
 
                 const newUser = await write('users.json', allUsers)

@@ -188,6 +188,7 @@ app.post('/courses', async(req, res, next) => {
 app.get("/courseRequest", async(req, res) => {
     const allCourses = read('courses.json')
     const allUsers = read('users.json')
+    res.json(allUsers)
 
 })
 

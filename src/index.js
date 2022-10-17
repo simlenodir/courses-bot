@@ -138,7 +138,7 @@ bot.on('callback_query', async location => {
                 allUsers.push({
                     phone: msg.contact.phone_number,
                     name: name.text,
-                    location: location.message.text.split('-')
+                    location: location.message.text.split('-')[0]
                 })
 
                 const newUser = await write('users.json', allUsers)

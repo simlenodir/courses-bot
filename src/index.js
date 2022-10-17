@@ -96,7 +96,7 @@ bot.on('location', async msg => {
     
     if(userLocation) {
         console.log(typeof userLocation)
-        bot.sendMessage(msg.chat.id, `${userLocation} - shu manzilni tasdiqlaysizmi`, {
+        bot.sendMessage(msg.chat.id, `${userLocation} :: shu manzilni tasdiqlaysizmi`, {
             reply_markup: {
                 inline_keyboard: [
                     [
@@ -138,7 +138,7 @@ bot.on('callback_query', async location => {
                 allUsers.push({
                     phone: msg.contact.phone_number,
                     name: name.text,
-                    location: location.message.text.split('-')[0]
+                    location: location.message.text.split('::')[0]
                 })
 
                 const newUser = await write('users.json', allUsers)

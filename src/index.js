@@ -1,6 +1,7 @@
 import dotenv from "dotenv"
 dotenv.config()
 import express from "express"
+import cors from "cors"
 
 import TelegramBot from "node-telegram-bot-api"
 import { read, write } from "./utils/FS.js"
@@ -23,6 +24,7 @@ const bot = new TelegramBot(process.env.TOKEN, { polling: true })
 const app = express()
 
 app.use(express.json())
+app.use(cors())
 
 bot.onText(/\/start/, msg => {
     const chatId = msg.chat.id

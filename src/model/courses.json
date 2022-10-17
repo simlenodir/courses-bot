@@ -18,5 +18,15 @@
         "id": 4,
         "name": "Rus tili",
         "describtion": "Yaxshi kurs ularning fikricha"
+    },
+    {
+        "id": 5,
+        "name": "Node.js",
+        "describtion": "Yaxshi kurs"
+    },
+    {
+        "id": 6,
+        "name": "Phton",
+        "describtion": "Yaxshi kurs shekili"
     }
 ]

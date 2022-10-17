@@ -1,5 +1,6 @@
 import dotenv from "dotenv"
 dotenv.config()
+import express from "express"
 
 import TelegramBot from "node-telegram-bot-api"
 import { read, write } from "./utils/FS.js"
@@ -9,10 +10,19 @@ import fs from "fs"
 import path from "path"
 import { contactHandlers } from "./handlers/contact.handlers.js"
 import { courseInfo } from "./handlers/courseInfo.js"
+import { courseValidation } from "./validation/validation.js"
+import { errorHandler } from "./middlewares/errorHandlers.js"
+import { ErrorHandler } from "./errors/errorHandler.js"
+
+const PORT = process.env.PORT || 9000
 
 const userInfo = {}
 
 const bot = new TelegramBot(process.env.TOKEN, { polling: true })
+
+const app = express()
+
+app.use(express.json())
 
 bot.onText(/\/start/, msg => {
     const chatId = msg.chat.id
@@ -143,4 +153,46 @@ bot.on('callback_query', async location => {
             })
         })
     }
+})
+
+app.get('/courses', (req, res) => {
+    const allCourses = read('courses.json')
+    res.json(allCourses)
+})
+
+app.post('/courses', async(req, res, next) => {
+    const {error, value } = courseValidation.validate(req.body) 
+    const { describtion, name } = value
+   
+    if(error) {
+        return next(new ErrorHandler(error.message, 400))
+    }
+
+    const allCourses = read('courses.json')
+
+    allCourses.push({id: allCourses.at(-1)?.id + 1, name, describtion})
+
+    const newCourse = await write('courses.json', allCourses)
+    .catch(err => next( new ErrorHandler(err.message, 503)))
+
+    if (newCourse) {
+        res.json({
+            message: "new course created"
+        })
+    }
+    res.json("ok")
+})
+
+app.get("/courseRequest", async(req, res) => {
+    const allCourses = read('courses.json')
+    const allUsers = read('users.json')
+
+})
+
+app.use(errorHandler)
+
+app.all('/*', (_, res) => res.sendStatus(404))
+
+app.listen(PORT, () => {
+    console.log(PORT);
 })
